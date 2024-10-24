@@ -1,4 +1,5 @@
-name : Firebase Deployment
+name: Firebase Deployment
+
 on:
   push:
     branches:
@@ -9,22 +10,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name : Checkout Repo
-        uses : actions/checkout@v2
-      - name : Install Dependencies
-        uses : npm install
-      - name : Build
-        env  : 
-          CI : false
-          run: npm run build
-      - name : Archive Prodn Artifact
-        run  : actions/upload-artifact@v2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+        
+      - name: Install Dependencies
+        run: npm install
+        
+      - name: Build
+        env:
+          CI: false
+        run: npm run build
+
+      - name: Archive Prodn Artifact
+        uses: actions/upload-artifact@v2
         with:
-          name : prodn-artifact
-          path : build
-      - name : Deploy to Firebase
-        uses : w9jds/firebase-action@master
-        with : 
-          args : deploy --only hosting
-          env  :
-            FIREBASE_TOKEN : ${{ secrets.FIREBASE_TOKEN }}
+          name: prodn-artifact
+          path: build
+          
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@master
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
